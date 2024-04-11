@@ -2,7 +2,7 @@
 各种工具集
 """
 
-from Engine.Externals import sys, os, logging, time, Path, itertools, pkgutil, importlib, re, np, pd, random, string, shutil, locale, Union, DataFrame, pickle, base64, subprocess
+from Engine.Externals import sys, os, logging, time, Path, itertools, pkgutil, importlib, re, np, pd, random, string, shutil, locale, Union, DataFrame, pickle, base64, subprocess, chardet
 
 pass  # end import
 
@@ -541,7 +541,8 @@ class Tools:
             else:
                 print(f"文件夹 {folderpath_target.name} 为空，无需删除！")
         else:
-            print(f"文件夹 {folderpath_target.name} 不存在！")
+            print(f"文件夹 {folderpath_target.name} 不存在！直接新建一个文件夹。")
+            folderpath_target.mkdir(parents=True, exist_ok=True)
         pass  # function
 
     @classmethod
@@ -794,6 +795,23 @@ class Tools:
                 dict[key] = str(value)
                 pass  # if
             pass  # for
+        pass  # function
+
+    @classmethod
+    def detect_encoding(cls, file_path):
+        """
+        检测文件编码。
+
+        Args:
+            file_path (str): 文件路径
+
+        Returns:
+            str: 文件编码
+        """
+        with open(file_path, 'rb') as f:
+            result = chardet.detect(f.read())
+        return result['encoding']
+
         pass  # function
 
     pass  # class

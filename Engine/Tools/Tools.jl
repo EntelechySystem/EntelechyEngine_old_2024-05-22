@@ -172,23 +172,23 @@ end
 
 
 """
-宏：当测试时使用
+将待输出的消息同时写入到文件和控制台，并强制写入硬盘。
 
 # Args:
-- `content::String`: 要打印的内容
+- `content::String`: 要写入的消息
 
 Returns:
-    打印的内容
-
+    写入的消息。同时实时写入到文件、输出到控制台
 """
-macro testprintln(content)
-    if globals[:is_test]
-        return esc(
-            quote
-                write(f, $(content))
-                write(f, "\n")
-                println($(content))
-            end
-        )
-    end
+macro print_to_file_and_console(content)
+    # if globals[:is_test]
+    return esc(
+        quote
+            write(file_outputlog_txt, $(content))
+            write(file_outputlog_txt, "\n")
+            println($(content))
+        end
+    )
+    # end
 end
+
