@@ -152,8 +152,9 @@ class Tools:
     def set_experiments_folders(
             cls,
             foldername_experiments_output_data: str,
-            foldername_experiments: str,
-            str_folderpath_root_experiments: str,
+            foldername_experiments_output: str,
+            str_folderpath_experiments_projects: str,
+            str_folderpath_root_experiments_output: str,
             str_foldername_engine: str,
             str_folderpath_relpath_engine: str,
             str_foldername_outputData: str,
@@ -167,12 +168,13 @@ class Tools:
         """
         设置实验相关的文件夹路径。包括实验设置项文件夹、模型文件夹、实验导出数据文件夹、引擎工具所在的文件夹等。
 
-        根据【实验导出数据文件夹名称】、【实验文件夹名称】，生成【项目文件夹路径】、【引擎工具文件夹路径】、【实验文件夹路径】、【实验导出数据文件夹路径】、【模型文件夹路径】、【实验配置项设置项文件夹路径】、【实验参数设置项文件夹路径】、【实验实验个体众数据初始化设置项文件夹路径】等。
+        根据【实验导出数据文件夹名称】、【实验文件夹名称】等，生成【项目文件夹路径】、【引擎工具文件夹路径】、【实验项目文件夹路径】、【实验输出文件夹路径】、【实验导出数据文件夹路径】、【模型文件夹路径】、【实验配置项设置项文件夹路径】、【实验参数设置项文件夹路径】、【实验实验个体众数据初始化设置项文件夹路径】等。
 
         Args:
             foldername_experiments_output_data (str): 实验导出数据文件夹名称
-            foldername_experiments (str): 实验文件夹名称
-            str_folderpath_root_experiments (str): 实验文件夹根相对路径字符串
+            foldername_experiments_output (str): 实验输出文件夹名称
+            str_folderpath_experiments_projects (str): 实验项目文件夹相对路径字符串
+            str_folderpath_root_experiments_output (str): 实验输出文件夹根相对路径字符串
             str_foldername_engine (str): 引擎所在的项目之名称
             str_folderpath_relpath_engine (str): 当前项目根路径到引擎所在的项目之相对路径
             str_foldername_outputData (str): 输出数据所在的主文件夹之名称
@@ -189,7 +191,9 @@ class Tools:
 
             folderpath_engine (Path): 引擎工具文件夹路径
 
-            folderpath_experiments (Path): 实验文件夹路径
+            folderpath_experiments_projects (Path): 实验项目所在文件夹路径
+
+            folderpath_experiments_output (Path): 实验导出文件夹路径
 
             folderpath_experiments_output_data (Path): 实验导出数据文件夹路径
 
@@ -221,33 +225,35 @@ class Tools:
         folderpath_engine = Tools.get_project_rootpath(str_foldername_engine, str_folderpath_relpath_engine)
         folderpath_outputData = Tools.get_project_rootpath(str_foldername_outputData, str_folderpath_relpath_outputData)
 
-        folderpath_experiments = Path(folderpath_outputData, str_folderpath_root_experiments, foldername_experiments)
+        folderpath_experiments_projects = Path(folderpath_project, str_folderpath_experiments_projects)
 
-        folderpath_experiments.mkdir(parents=True, exist_ok=True)
+        folderpath_experiments_output = Path(folderpath_outputData, str_folderpath_root_experiments_output, foldername_experiments_output)
+
+        folderpath_experiments_output.mkdir(parents=True, exist_ok=True)
 
         if foldername_experiments_output_data is not None:
-            folderpath_experiments_output_data = Path(folderpath_experiments, foldername_experiments_output_data)
+            folderpath_experiments_output_data = Path(folderpath_experiments_output, foldername_experiments_output_data)
             folderpath_experiments_output_data.mkdir(parents=True, exist_ok=True)  # 创建文件夹，以导出实验输出数据
         else:
             folderpath_experiments_output_data = None
             pass
 
-        folderpath_experiments_output_log = Path(folderpath_experiments, "outputlog")
+        folderpath_experiments_output_log = Path(folderpath_experiments_output, "outputlog")
         folderpath_experiments_output_log.mkdir(parents=True, exist_ok=True)  # 创建文件夹，以导出实验输出日志
 
-        folderpath_experiments_output_config = Path(folderpath_experiments, "config")
+        folderpath_experiments_output_config = Path(folderpath_experiments_output, "config")
         folderpath_experiments_output_config.mkdir(parents=True, exist_ok=True)  # 创建文件夹，以导出实验输出配置项设置
 
-        folderpath_experiments_output_settings = Path(folderpath_experiments, "settings")
+        folderpath_experiments_output_settings = Path(folderpath_experiments_output, "settings")
         folderpath_experiments_output_settings.mkdir(parents=True, exist_ok=True)  # 创建文件夹，以导出实验输出配置项设置
 
-        folderpath_experiments_output_parameters = Path(folderpath_experiments, "parameters")
+        folderpath_experiments_output_parameters = Path(folderpath_experiments_output, "parameters")
         folderpath_experiments_output_parameters.mkdir(parents=True, exist_ok=True)  # 创建文件夹，以导出实验输出参数项设置
 
-        folderpath_experiments_output_agents = Path(folderpath_experiments, "agents")
+        folderpath_experiments_output_agents = Path(folderpath_experiments_output, "agents")
         folderpath_experiments_output_agents.mkdir(parents=True, exist_ok=True)  # 创建文件夹，以导出实验输出实验个体众数据初始化设置
 
-        folderpath_experiments_output_models = Path(folderpath_experiments, "models")
+        folderpath_experiments_output_models = Path(folderpath_experiments_output, "models")
         folderpath_experiments_output_models.mkdir(parents=True, exist_ok=True)  # 创建文件夹，以导出实验输出模型文件夹
 
         ## 设定实验相关的一些重要的文件夹
@@ -260,7 +266,8 @@ class Tools:
         return (
             folderpath_project,
             folderpath_engine,
-            folderpath_experiments,
+            folderpath_experiments_projects,
+            folderpath_experiments_output,
             folderpath_experiments_output_data,
             folderpath_experiments_output_log,
             folderpath_experiments_output_config,
@@ -300,13 +307,13 @@ class Tools:
             else:
                 str_datetime = ""
                 pass  # if
-            foldername_experiments = str_manuallyName + str_datetime
+            foldername_experiments_output = str_manuallyName + str_datetime
         elif type_of_experiments_foldername == "set manually":
-            foldername_experiments = foldername_set_manually
+            foldername_experiments_output = foldername_set_manually
         else:
             raise Exception("关键词取值错误！".format(type_of_experiments_foldername))
             pass  # if
-        return foldername_experiments
+        return foldername_experiments_output
 
     @classmethod
     def _get_current_project_rootpath(cls):
@@ -415,7 +422,11 @@ class Tools:
                             continue
                         shutil.copytree(file, Path(folderpath_target, file.name))
                     else:
-                        shutil.copy(file, Path(folderpath_target))
+                        if not file.name.startswith('~$'):  # 检查文件名是否以 '~$' 开头
+                            shutil.copy(file, Path(folderpath_target))
+                        else:
+                            print(f"文件 {file} 被忽略，跳过复制。")
+                            pass  # if
                         pass  # if
                     pass  # for
                 print(f"文件夹 {folderpath_source.name} 已成功复制到 {folderpath_target.name} ！")
