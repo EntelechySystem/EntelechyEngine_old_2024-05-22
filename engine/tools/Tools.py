@@ -2,7 +2,7 @@
 各种工具集
 """
 
-from Engine.Externals import sys, os, logging, time, Path, itertools, pkgutil, importlib, re, np, pd, random, string, shutil, locale, Union, DataFrame, pickle, base64, subprocess, chardet
+from engine.externals import sys, os, logging, time, Path, itertools, pkgutil, importlib, re, np, pd, random, string, shutil, locale, Union, DataFrame, pickle, base64, subprocess, chardet
 
 pass  # end import
 

@@ -18,9 +18,9 @@ def simulator(config: dict):
     # global config, para
 
     # %% 首先导入相关包
-    from Engine import os, platform, logging, Path, shutil, datetime, time, subprocess, pickle, base64, deepcopy
-    from Engine.Tools.Tools import Tools
-    from Engine.Tools.DataManageTools import DataManageTools
+    from engine import os, platform, logging, Path, shutil, datetime, time, subprocess, pickle, base64, deepcopy
+    from engine.tools.Tools import Tools
+    from engine.tools.DataManageTools import DataManageTools
 
     # %% 初始化
     ## 获取项目路径、模拟器工具路径
