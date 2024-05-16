@@ -825,4 +825,116 @@ class Tools:
 
         pass  # function
 
+    @classmethod
+    def generate_agents_definitions_from_dicts_to_new_classes_as_python_file(cls, filepath_dicts: str, filepath_classes: str):
+        """
+        从初始化 Agents 的字典生成对应的类，但是不做设置。该类导出为一个 Python文件。DEBUG 还没有做任何测试！
+
+        Warnings:
+            警告：这个功能会直接改写文件，所以请务必做好备份！
+
+        Args:
+            filepath_dicts (str): 字典文件路径
+            filepath_classes (str): 类文件路径
+
+        Returns:
+            None
+
+        """
+        import numpy as np
+        import ast
+        import re
+
+        # 读取set_agents_variables.py文件
+        with open('libraries/agents_library/agents_test/set_agents_variables.py', 'r') as file:
+            lines = file.readlines()
+
+        # 使用正则表达式和ast模块找到字典定义
+        dict_strings = re.findall(r'set_agents_variables = (.*?)\n\nset_interagents_variables', ''.join(lines), re.DOTALL)
+        dicts = [ast.literal_eval(dict_string) for dict_string in dict_strings]
+
+        # 获取每个键值对后面的注释
+        comments = re.findall(r'# (.*?)\n', ''.join(lines))
+
+        # 创建新的Python文件
+        with open('new_classes.py', 'w') as file:
+            for i, dict_ in enumerate(dicts):
+                # 写入类定义的开始部分
+                file.write(f'class agent{i + 1}:\n')
+                file.write('    def __init__(self):\n')
+
+                # 为每个键生成一个类属性
+                for j, key in enumerate(dict_.keys()):
+                    file.write(f'        self.{key} = np.NaN  # {comments[j]}\n')
+
+                # 在类之间添加空行
+                file.write('\n')
+
+            pass  # with
+
+        pass  # function
+
+
+    @classmethod
+    def draw_color_band_before_experiments(ids: list, process_status: list, plans_status: list, tasks_status: list, filepath_to_save: Path):
+        """
+        绘制实验组的状态分布图
+
+        Args:
+            ids (list): 实验组 id
+            process_status (list): 实验组的处理状态
+            plans_status (list): 实验组的计划状态
+            tasks_status (list): 实验组的任务状态
+            filepath_to_save (Path): 保存文件路径
+
+        Returns:
+
+        """
+        import matplotlib.pyplot as plt
+        color_mapping_01 = {"RAW": "yellow", "DOING": "red", "DONE": "gray"}  # 创建状态颜色映射
+        color_mapping_02 = {"PLAN": "blue"}
+        color_mapping_03 = {"TASK": "green"}
+        fig, axs = plt.subplots(3, 1, figsize=(10, 6))  # 创建图形和子图
+        colors_01 = [color_mapping_01[status] for status in process_status]  # 绘制第一行彩条
+        axs[0].bar(ids, [1] * len(ids), color=colors_01, width=1.0)
+        axs[0].set_xticks([])
+        axs[0].set_yticks([])
+        colors_02 = [color_mapping_02[status] for status in plans_status]  # 绘制第二行彩条
+        axs[1].bar(ids, [1] * len(ids), color=colors_02, width=1.0)
+        axs[1].set_xticks([])
+        axs[1].set_yticks([])
+        colors_03 = [color_mapping_03[status] for status in tasks_status]  # 绘制第三行彩条
+        axs[2].bar(ids, [1] * len(ids), color=colors_03, width=1.0)
+        axs[2].set_xticks([])
+        axs[2].set_yticks([])
+        plt.savefig(filepath_to_save, bbox_inches='tight', pad_inches=0)  # 保存图形
+
+        pass  # function
+
+    @classmethod
+    def draw_color_band_after_experiments(ids: list, process_status: list, filepath_to_save: Path):
+        """
+        绘制实验组 id 分布对应的实验组作业运行之前的作业完成状态信息。
+
+        Args:
+            ids (list): 实验组 id
+            process_status (list): 实验组的处理状态
+            plans_status (list): 实验组的计划状态
+            tasks_status (list): 实验组的任务状态
+            filepath_to_save (Path): 保存文件路径
+
+        Returns:
+
+        """
+        import matplotlib.pyplot as plt
+        color_mapping_01 = {"RAW": "yellow", "DOING": "red", "DONE": "gray"}  # 创建状态颜色映射
+        fig, axs = plt.subplots(1, 1, figsize=(10, 2))  # 创建图形和子图
+        colors_01 = [color_mapping_01[status] for status in process_status]  # 绘制第一行彩条
+        axs[0].bar(ids, [1] * len(ids), color=colors_01, width=1.0)
+        axs[0].set_xticks([])
+        axs[0].set_yticks([])
+        plt.savefig(filepath_to_save, bbox_inches='tight', pad_inches=0)  # 保存图形
+
+        pass  # function
+
     pass  # class
