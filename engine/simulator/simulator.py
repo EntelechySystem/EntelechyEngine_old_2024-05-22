@@ -232,8 +232,8 @@ def simulator(config: dict):
             pass  # for
 
         ## 运行实验组模拟程序 #HACK 未开发
-        # from Programs.experiments_program import experiments_program
-        # experiments_program(globals, para)
+        from Programs.experiments_program import experiments_program
+        experiments_program(globals, para)
 
         ## 关闭日志
         logger.removeHandler(log_file_handler)
